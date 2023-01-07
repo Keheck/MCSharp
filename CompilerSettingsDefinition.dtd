@@ -1,0 +1,3 @@
+<!ELEMENT definition (token, value)>
+<!ELEMENT token (#PCDATA)>
+<!ELEMENT value (#PCDATA)>
