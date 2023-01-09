@@ -1,3 +1,7 @@
 <!ELEMENT definition (token, value)>
 <!ELEMENT token (#PCDATA)>
 <!ELEMENT value (#PCDATA)>
+<!ELEMENT min (#PCDATA)>
+<!ELEMENT max (#PCDATA)>
+<!ELEMENT exact (#PCDATA)>
+<!ELEMENT target (exact|(min, max))>
