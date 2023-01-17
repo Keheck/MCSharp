@@ -10,7 +10,8 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
-    <EmbeddedResource Include="data\version.json"/>
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include="data/versions.txt"/>
+  </ItemGroup>
 </Project>
