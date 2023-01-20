@@ -1,3 +1,5 @@
+namespace MCSharp.Compiler;
+
 enum Tokens {
     RESERVED,
     INTEGER_LITERAL,

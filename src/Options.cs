@@ -1,5 +1,7 @@
 using CommandLine;
 
+namespace MCSharp;
+
 class Options {
     private string _inputFile = "";
     [Value(0)]
