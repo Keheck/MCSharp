@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="compiler">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="target">
+          <xs:complexType>
+            <xs:choice>
+              <xs:sequence>
+                <xs:element name="min" maxOccurs="1">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="\d+\.\d+(\.\d+)?"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:element>
+                <xs:element name="max">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="\d+\.\d+(\.\d+)?"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:element>
+              </xs:sequence>
+              <xs:element name="exact" type="xs:string"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="defines" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="define" minOccurs="1">
+                <xs:complexType>
+                  <xs:attribute name="name" type="xs:string"/>
+                  <xs:attribute name="value" type="xs:string"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="includes" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="path" type="xs:string"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="dependencies" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="repository" type="xs:string"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!--<xs:element name="build">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="entry-points" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence maxOccurs="unbounded">
+                    <xs:element name="function" type="xs:string"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="loops" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence maxOccurs="unbounded">
+                    <xs:element name="function" type="xs:string"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="output">
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>-->
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
