@@ -13,9 +13,12 @@ class Program {
         Options result = Parser.Default.ParseArguments<Options>(args).Value;
         string inputPath = result.InputFile;
     
-        if(MimeTypeMap.GetMimeType(inputPath.Split('.').Last()) != "application/xml")
+        if(MimeTypeMap.GetMimeType(inputPath.Split('.').Last()) != MimeTypeMap.GetMimeType("xml"))
             throw new ArgumentException("File must have the XML mime type");
         
+        XmlDocument document = new XmlDocument();
+        document.Load(new FileStream(inputPath, FileMode.Open));
+
         
     }
 }
