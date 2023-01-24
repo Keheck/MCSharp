@@ -46,13 +46,6 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="includes" minOccurs="0">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="path" type="xs:string"/>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:element name="dependencies" minOccurs="0">
           <xs:annotation>
             <xs:documentation>Use this element to define several dependencies. The compiler will resolve those dependencies by searching GitHub's respositories.</xs:documentation>
