@@ -15,4 +15,7 @@ class Options {
 
     [Option('w', "log-warnings")]
     public bool Warn { get; set; } = true;
+
+    [Option('z', "zip")]
+    public bool Zip { get; set; } = false;
 }
