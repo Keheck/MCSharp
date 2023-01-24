@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MCSharp.Options;
 
-[Verb("dependencies")]
+[Verb("dependencies", aliases: new string[]{"dependency"})]
 class DependencyOptions {
     [Option('a', "add")]
     public IEnumerable<string> DependenciesToAdd { get; set; } = Enumerable.Empty<string>();
@@ -16,4 +16,10 @@ class DependencyOptions {
 
     [Option('r', "remove")]
     public IEnumerable<string> DependenciesToRemove { get; set; } = Enumerable.Empty<string>();
+
+    [Option('t', "token")]
+    public string AccessToken { get; set; } = "";
+
+    [Option('i', "info")]
+    public bool GetInformation { get; set; } = false;
 }
