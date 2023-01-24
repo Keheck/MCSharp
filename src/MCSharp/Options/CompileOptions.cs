@@ -1,10 +1,11 @@
 using CommandLine;
 
-namespace MCSharp;
+namespace MCSharp.Options;
 
-class Options {
+[Verb("build", true)]
+class CompileOptions {
     private string _inputFile = "";
-    [Value(0)]
+    [Option('i', "infile", SetName = "build")]
     public string InputFile { 
         get { return _inputFile; } 
         set {
@@ -13,9 +14,9 @@ class Options {
         } 
     }
 
-    [Option('w', "log-warnings")]
+    [Option('w', "log-warnings", SetName = "build")]
     public bool Warn { get; set; } = true;
 
-    [Option('z', "zip")]
-    public bool Zip { get; set; } = false;
+    [Option('t', "token", SetName = "build")]
+    public string API_Token { get; set; } = "";
 }

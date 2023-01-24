@@ -31,24 +31,71 @@
             <xs:sequence>
               <xs:element name="define" minOccurs="1">
                 <xs:complexType>
-                  <xs:attribute name="name" type="xs:string"/>
-                  <xs:attribute name="value" type="xs:string"/>
+                  <xs:attribute name="name" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation>Defines the name of the token. Must be provided else a compilation error will be thrown</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="value" type="xs:string">
+                    <xs:annotation>
+                      <xs:documentation>Defines the value of the token. if omitted, the default will be "1" without the quotes.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="includes" minOccurs="0">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="path" type="xs:string"/>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:element name="dependencies" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Use this element to define several dependencies. The compiler will resolve those dependencies by searching GitHub's respositories.</xs:documentation>
+          </xs:annotation>
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="repository" type="xs:string"/>
+              <xs:element name="dependency" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="owner" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Here goes the username of the repository owner. Required field</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="repository" type="xs:string">
+                      <xs:annotation>
+                        <xs:documentation>Here goes the name of the dependency's repository. Required field</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="version" type="xs:string" minOccurs="0">
+                      <xs:annotation>
+                        <xs:documentation>
+                          Here goes either the release tag or the short hash of the associated commit.
+                          If the version is set as "{branch}-snapshot" where {branch} is replaced with the name of the target branch, the compiler fetches the sources of the latest commit (if it hasn't done so in the last hour. This is in order to prevent ratelimit issues).
+                          Using "latest" is equivalent to using "master-snapshot".
+                        </xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="scope">
+                      <xs:annotation>
+                        <xs:documentation>This tag specifies the scope of the dependency. If omitted, "provided" will be assumed. Valid values are: "compile", "provided"</xs:documentation>
+                      </xs:annotation>
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:enumeration value="compile">
+                            <xs:annotation>
+                              <xs:documentation>Includes the source files of this dependency into the compilation process. The dependency will not have to be present when the project is run in Minecraft.</xs:documentation>
+                            </xs:annotation>
+                          </xs:enumeration>
+                          <xs:enumeration value="provided">
+                            <xs:annotation>
+                              <xs:documentation>Asserts that the dependency is present when the compiled project is run in Minecraft.</xs:documentation>
+                            </xs:annotation>
+                          </xs:enumeration>
+                       </xs:restriction>
+                      </xs:simpleType>
+                   </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
