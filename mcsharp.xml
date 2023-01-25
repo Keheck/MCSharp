@@ -4,6 +4,7 @@
     <target>
         <min>1.15</min>
         <max>1.15</max>
+        <mismatch-policy>lowest</mismatch-policy>
     </target>
     <defines>
         <define name="hello" value="world"/>

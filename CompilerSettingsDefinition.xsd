@@ -21,8 +21,35 @@
                     </xs:restriction>
                   </xs:simpleType>
                 </xs:element>
+                <xs:element name="mismatch-policy" minOccurs="0">
+                  <xs:annotation>
+                    <xs:documentation>
+                      This tag provides instructions on how to proceed if the min and max version have differing pack version. 
+                      If omitted, the compiler will prompt the user to validate whether to abort, use min or use max. Valid values are: "lowest", "highest"</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:enumeration value="lowest">
+                        <xs:annotation>
+                          <xs:documentation>Instructs the compiler to use the pack version that's associated with the min version.</xs:documentation>
+                        </xs:annotation>
+                      </xs:enumeration>
+                      <xs:enumeration value="highest">
+                        <xs:annotation>
+                          <xs:documentation>Instructs the compiler to use the pack version that's associated with the max version.</xs:documentation>
+                        </xs:annotation>
+                      </xs:enumeration>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:element>
               </xs:sequence>
-              <xs:element name="exact" type="xs:string"/>
+              <xs:element name="exact">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="\d+\.\d+(\.\d+)?"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
             </xs:choice>
           </xs:complexType>
         </xs:element>
@@ -69,8 +96,9 @@
                       <xs:annotation>
                         <xs:documentation>
                           Here goes either the release tag or the short hash of the associated commit.
-                          If the version is set as "{branch}-snapshot" where {branch} is replaced with the name of the target branch, the compiler fetches the sources of the latest commit (if it hasn't done so in the last hour. This is in order to prevent ratelimit issues).
-                          Using "latest" is equivalent to using "master-snapshot".
+                          If the version is set as "{commit}-snapshot" where {commit} is replaced with the shorthash of the targeted commit, 
+                          the compiler fetches the sources of the targeted commit saves tat information in the dependency cache.
+                          If omitted, 
                         </xs:documentation>
                       </xs:annotation>
                     </xs:element>
