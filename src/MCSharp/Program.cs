@@ -31,14 +31,15 @@ class Program {
             );*/
     }
 
-    public static XmlDocument GetCompilerSettingsDocument(string? location) {
+    public static XmlDocument GetCompilerSettingsDocument(string ?location) {
         XmlDocument document = new XmlDocument();
+        IEnumerable< dir = new DirectoryInfo(location ?? Directory.GetCurrentDirectory())
 
         try { 
             FileInfo compilerDefinition = new DirectoryInfo(location ?? Directory.GetCurrentDirectory()).EnumerateFiles().Where((info) => info.Name == "mcsharp.xml").Single();
             document.Load(compilerDefinition.Open(System.IO.FileMode.Open));
 
-            //XmlSchema schema = XmlSchema.Read();
+            XmlSchema schema = XmlSchema.Read(new FileStream());
         }
         catch(InvalidOperationException) {
             throw new FileNotFoundException($"No file named mcsharp.xml could be found in {location}. It is a required file for setting up the compiler.");
@@ -50,7 +51,7 @@ class Program {
     // Find a way to check the up-to-dateness of the xml schema definition without too many API calls
     private async static Task FetchSchemaDefinition() {
         GitHubClient client = new GitHubClient(new ProductHeaderValue("MCSharp-Compiler", "1.0"));
-        client.Credentials = new Credentials("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");
+        client.Credentials = new Credentials("");
         FileInfo settings = new FileInfo("CompilerSettingsDefinition.xsd");
         byte[] sha1 = SHA1.Create().ComputeHash(settings.OpenRead());
 
