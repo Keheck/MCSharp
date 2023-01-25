@@ -52,6 +52,8 @@ class Program {
         GitHubClient client = new GitHubClient(new ProductHeaderValue("MCSharp-Compiler", "1.0"));
         client.Credentials = new Credentials("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");
         FileInfo settings = new FileInfo("CompilerSettingsDefinition.xsd");
+        byte[] sha1 = SHA1.Create().ComputeHash(settings.OpenRead());
+
 
         if(!settings.Exists) {
             RepositoryContent content = (await client.Repository.Content.GetAllContents("Keheck", "MCSharp", "CompilerSettingsDefinition.xsd")).Single();
