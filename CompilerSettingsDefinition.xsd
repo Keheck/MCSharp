@@ -25,7 +25,8 @@
                   <xs:annotation>
                     <xs:documentation>
                       This tag provides instructions on how to proceed if the min and max version have differing pack version. 
-                      If omitted, the compiler will prompt the user to validate whether to abort, use min or use max. Valid values are: "lowest", "highest"</xs:documentation>
+                      If omitted, the compiler will prompt the user to validate whether to abort, use min or use max. Valid values are: "lowest", "highest"
+                    </xs:documentation>
                   </xs:annotation>
                   <xs:simpleType>
                     <xs:restriction base="xs:string">
