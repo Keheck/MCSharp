@@ -2,4 +2,36 @@
 <mcsharp>
     <version>1.0</version>
     <product-name>MCSharp-Compiler</product-name>
+    <minecraft>
+        <version-packformat-map>
+            <entry>
+                <version>1.13</version>
+                <pack-format>4</pack-format>
+            </entry>
+            <entry>
+                <version>1.15</version>
+                <pack-format>5</pack-format>
+            </entry>
+            <entry>
+                <version>1.16.2</version>
+                <pack-format>4</pack-format>
+            </entry>
+            <entry>
+                <version>1.17</version>
+                <pack-format>7</pack-format>
+            </entry>
+            <entry>
+                <version>1.18</version>
+                <pack-format>8</pack-format>
+            </entry>
+            <entry>
+                <version>1.18.2</version>
+                <pack-format>9</pack-format>
+            </entry>
+            <entry>
+                <version>1.19</version>
+                <pack-format>10</pack-format>
+            </entry>
+        </version-packformat-map>
+    </minecraft>
 </mcsharp>

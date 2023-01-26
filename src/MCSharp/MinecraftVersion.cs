@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace MCSharp;
 
@@ -27,32 +28,25 @@ class MinecraftVersion {
     }
 
     private static void initialiseVersionMap() {
-        Stream? versionInfoStream = Program.assembly.GetManifestResourceStream("MCSharp.data.versions.txt");
+        Stream? versionInfoStream = Program.assembly.GetManifestResourceStream("MCSharp.data.metadata.xml");
 
         if(versionInfoStream == null)
-            throw new Exception("Could not find information on Minecraft versions");
+            throw new FileNotFoundException("Could not find information on Minecraft versions");
+        
+        XmlDocument document = new XmlDocument();
+        document.Load(versionInfoStream);
+        // Shut up, I know what I'm doing
+        #pragma warning disable CS8600
+        #pragma warning disable CS8602
+        XmlNode versionsRoot = document["minecraft"]["version-packformat-map"];
 
-        int b;
-        bool readingKey = true;
-        string version = "";
-        string packFormat = "";
+        foreach(XmlNode entry in versionsRoot.ChildNodes) {
+            int packFormat = int.Parse(entry["pack-format"].InnerText);
+            string version = entry["version"].InnerText;
 
-        while((b = versionInfoStream.ReadByte()) > 0) {
-            if(readingKey) {
-                if(b == '=')
-                    readingKey = false;
-                else
-                    version += (char)b;
-            }
-            else {
-                if(!(b == '\n'))
-                    packFormat += (char)b;
-                else {
-                    readingKey = true;
-                    versionMap.Add(int.Parse(packFormat), version);
-                }
-            }
+            versionMap[packFormat] = version;
         }
+        #pragma warning restore
     }
 
     public static string getMinVersion(int format) {
