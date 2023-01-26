@@ -23,10 +23,6 @@ class DependencyOptions {
     [Option('r', "remove")]
     public IEnumerable<string> DependenciesToRemove { get; set; } = Enumerable.Empty<string>();
 
-    /* If set, this token will be used to access the GitHub API. It comes with the privilege of 5000 requests/hour instead of the 60 requests/hour for unauthenticated requests */
-    [Option('t', "token")]
-    public string AccessToken { get; set; } = "";
-
     /* If set, this one prints out ratelimit information to the user. Be aware that fetching ratelimit info in itself adds to the ratelimit counter. */
     [Option('i', "info")]
     public bool GetInformation { get; set; } = false;

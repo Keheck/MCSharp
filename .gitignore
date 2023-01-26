@@ -4,6 +4,7 @@
 # User Defined
 *.code-workspace
 .vscode/*
+.env
 
 ###################
 # compiled source #
