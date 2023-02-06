@@ -4,7 +4,7 @@ namespace MCSharp;
 
 class EnvParser {
     public static void LoadEnvIntoEnvironmentVariables() {
-        LoadEnvIntoDictionary(null);
+        LoadEnvIntoEnvironmentVariables(null);
     }
 
     public static void LoadEnvIntoEnvironmentVariables(string? location) {
@@ -19,10 +19,13 @@ class EnvParser {
 
     public static Dictionary<string, string> LoadEnvIntoDictionary(string? location) {
         Dictionary<string, string> env = new Dictionary<string, string>();
-        FileInfo envFile = new FileInfo($"{location ?? ""}/.env");
+        FileInfo envFile = new FileInfo($"{location ?? ""}.env");
         StreamReader stream = envFile.OpenText();
         string content = stream.ReadToEnd();
         stream.Close();
+
+        if(content.Last() != '\n')
+            content += '\n';
 
         string key = "";
         string value = "";

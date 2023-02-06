@@ -39,17 +39,12 @@ class Program {
             client.Credentials = new Credentials(Environment.GetEnvironmentVariable("GITHUB_TOKEN"));
         }
 
-        lock(objLock) {
-            Task task = Task.Run(async () => await FetchSchemaDefinition());
-            task.Wait();
-        }
-
-        /*var result = Parser.Default.ParseArguments<CompileOptions, DependencyOptions>(args)
+        var result = Parser.Default.ParseArguments<CompileOptions, DependencyOptions>(args)
             .MapResult(
                 (CompileOptions options) => CompileProject(options),
-                (DependencyOptions options) => ResolveDependencies(options),
+                (DependencyOptions options) => DependencyManager.Resolve(options),
                 (errors) => 1
-            );*/
+            );
     }
 
     public static XmlDocument GetCompilerSettingsDocument(string ?location) {
@@ -60,7 +55,18 @@ class Program {
             FileInfo compilerDefinition = new DirectoryInfo(location ?? Directory.GetCurrentDirectory()).EnumerateFiles().Where((info) => info.Name == "mcsharp.xml").Single();
             document.Load(compilerDefinition.Open(System.IO.FileMode.Open));
 
+            #pragma warning disable CS8600, CS8604
+            XmlSchema schema = XmlSchema.Read(assembly.GetManifestResourceStream("MCSharp.data.CompilerSettingsSchema.xsd"), null);
+            XmlSchemaSet schemaSet = new XmlSchemaSet();
+            schemaSet.Add(schema);
+            #pragma warning restore
 
+            document.Schemas = schemaSet;
+            document.Validate((sender, e) => {
+                throw new XmlSchemaValidationException("mcsharp.xml did not abide to the schema definition. Cannot continue compilation");
+            });
+
+            Console.WriteLine("Validated mcsharp.xml");
         }
         catch(InvalidOperationException) {
             throw new FileNotFoundException($"No file named mcsharp.xml could be found in {location}. It is a required file for setting up the compiler.");
@@ -69,31 +75,8 @@ class Program {
         return document;
     }
 
-    private async static Task FetchSchemaDefinition() {
-        FileInfo settings = new FileInfo("CompilerSettingsDefinition.xsd");
-        byte[] sha1 = SHA1.Create().ComputeHash(settings.OpenRead());
-
-        if(!settings.Exists) {
-            RepositoryContent content = (await client.Repository.Content.GetAllContents("Keheck", "MCSharp", "CompilerSettingsDefinition.xsd")).Single();
-        }
-    }
-
     private static int CompileProject(CompileOptions options) {
         XmlDocument document = GetCompilerSettingsDocument(options.InputFile);
-
-        return 0;
-    }
-
-    private static int ResolveDependencies(DependencyOptions options) {
-        XmlDocument document = GetCompilerSettingsDocument(options.CompilerDirectory);
-
-        if(options.Fetch) {
-            XmlNode? dependenciesNode = document["dependencies"];
-
-            if(dependenciesNode == null) {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            }
-        }
 
         return 0;
     }

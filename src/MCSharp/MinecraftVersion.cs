@@ -36,8 +36,7 @@ class MinecraftVersion {
         XmlDocument document = new XmlDocument();
         document.Load(versionInfoStream);
         // Shut up, I know what I'm doing
-        #pragma warning disable CS8600
-        #pragma warning disable CS8602
+        #pragma warning disable CS8600, CS8602
         XmlNode versionsRoot = document["minecraft"]["version-packformat-map"];
 
         foreach(XmlNode entry in versionsRoot.ChildNodes) {
