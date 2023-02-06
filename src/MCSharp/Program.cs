@@ -42,7 +42,7 @@ class Program {
         var result = Parser.Default.ParseArguments<CompileOptions, DependencyOptions>(args)
             .MapResult(
                 (CompileOptions options) => CompileProject(options),
-                (DependencyOptions options) => ResolveDependencies(options),
+                (DependencyOptions options) => DependencyManager.Resolve(options),
                 (errors) => 1
             );
     }
@@ -77,20 +77,6 @@ class Program {
 
     private static int CompileProject(CompileOptions options) {
         XmlDocument document = GetCompilerSettingsDocument(options.InputFile);
-
-        return 0;
-    }
-
-    private static int ResolveDependencies(DependencyOptions options) {
-        XmlDocument document = GetCompilerSettingsDocument(options.CompilerDirectory);
-
-        if(options.Fetch) {
-            XmlNode? dependenciesNode = document["dependencies"];
-
-            if(dependenciesNode == null) {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            }
-        }
 
         return 0;
     }
