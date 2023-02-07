@@ -47,7 +47,7 @@ class Program {
             );
     }
 
-    public static XmlDocument GetCompilerSettingsDocument(string ?location) {
+    public static XmlDocument GetCompilerSettingsDocument(string? location) {
         XmlDocument document = new XmlDocument();
         IEnumerable<FileInfo> files = new DirectoryInfo(location ?? Directory.GetCurrentDirectory()).EnumerateFiles();
 
