@@ -48,10 +48,15 @@ class DependencyManager {
 
         string author = dependency["author"]!.InnerText;
         string repoName = dependency["repository"]!.InnerText;
-        string version = dependency["version"] == null ? "LATEST" : dependency["version"]!.InnerText;
 
-        Repository repository = await client.Repository.Get(author, repoName);
+        XmlNode? node = dependency["release"] ?? dependency["commit"];
+        string version = node != null ? node.InnerText : "HEAD";
 
-        repository.Url
+        byte[] content = await client.Repository.Content.GetArchive(author, repoName, ArchiveFormat.Zipball, version);
+
+        string zipFileName = $"{author}_{repoName}_{version}.zip";
+        FileStream stream = new FileStream(zipFileName, System.IO.FileMode.OpenOrCreate, FileAccess.Write);
+        await stream.WriteAsync(content, 0, content.Length);
+        stream.Close();
     }
 }
