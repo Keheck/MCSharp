@@ -13,7 +13,7 @@
         <dependency>
             <owner>Keheck</owner>
             <repository>MCSharp-Stdlib</repository>
-            <version>latest</version>
+            <commit>latest</commit>
             <scope>compile</scope>
         </dependency>
     </dependencies>

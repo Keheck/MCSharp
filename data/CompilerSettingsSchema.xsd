@@ -93,16 +93,32 @@
                         <xs:documentation>Here goes the name of the dependency's repository. Required field</xs:documentation>
                       </xs:annotation>
                     </xs:element>
-                    <xs:element name="version" type="xs:string" minOccurs="0">
+                    <xs:element name="branch" type="xs:string" minOccurs="0">
                       <xs:annotation>
-                        <xs:documentation>
-                          Here goes either the release tag or the short hash of the associated commit.
-                          If the version is set as "{commit}-snapshot" where {commit} is replaced with the shorthash of the targeted commit, 
-                          the compiler fetches the sources of the targeted commit saves tat information in the dependency cache.
-                          If omitted, 
-                        </xs:documentation>
+                        <xs:documentation>Here goes the name of the repository's branch. Optional, will target the main branch if omitted</xs:documentation>
                       </xs:annotation>
                     </xs:element>
+                    <xs:choice minOccurs="0">
+                      <xs:annotation>
+                        <xs:documentation>
+                          Gives the developer a choice between specifying a commit or a release to target as the dependency. If omitted, it will use the latest commit (head)
+                        </xs:documentation>
+                      </xs:annotation>
+                      <xs:element name="commit" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                          <xs:documentation>
+                            Use this if you want to specify a commit.
+                          </xs:documentation>
+                        </xs:annotation>
+                      </xs:element>
+                      <xs:element name="release" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                          <xs:documentation>
+                            Use this if you want to specify a release associated with a specific commit.
+                          </xs:documentation>
+                        </xs:annotation>
+                      </xs:element>                      
+                    </xs:choice>
                     <xs:element name="scope">
                       <xs:annotation>
                         <xs:documentation>This tag specifies the scope of the dependency. If omitted, "provided" will be assumed. Valid values are: "compile", "provided"</xs:documentation>
