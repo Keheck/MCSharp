@@ -8,7 +8,11 @@ class CompileOptions {
     [Option('i', "input-directory")]
     public string? InputFile { get; set; }
 
-    /* If set, the compiler will print warnings to the standard output. Set by default */
-    [Option('w', "log-warnings")]
-    public bool Warn { get; set; } = true;
+    /* If set, the compiler will not print warnings to the standard output. */
+    [Option("quiet")]
+    public bool Quiet { get; set; } = false;
+
+    /* If set, the compiler will not implicitly add the standard library as a dependency */
+    [Option("no-stdlib")]
+    public bool NoStandardLib { get; set; } = false;
 }
