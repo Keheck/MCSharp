@@ -83,7 +83,7 @@
               <xs:element name="dependency" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="owner" type="xs:string">
+                    <xs:element name="author" type="xs:string">
                       <xs:annotation>
                         <xs:documentation>Here goes the username of the repository owner. Required field</xs:documentation>
                       </xs:annotation>
@@ -119,7 +119,7 @@
                         </xs:annotation>
                       </xs:element>                      
                     </xs:choice>
-                    <xs:element name="scope">
+                    <xs:element name="scope" minOccurs="0">
                       <xs:annotation>
                         <xs:documentation>This tag specifies the scope of the dependency. If omitted, "provided" will be assumed. Valid values are: "compile", "provided"</xs:documentation>
                       </xs:annotation>

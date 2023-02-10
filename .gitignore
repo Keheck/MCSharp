@@ -5,6 +5,7 @@
 *.code-workspace
 .vscode/*
 .env
+dependencies
 
 ###################
 # compiled source #

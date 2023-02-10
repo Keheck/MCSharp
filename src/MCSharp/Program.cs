@@ -47,19 +47,16 @@ class Program {
             );
     }
 
-    public static XmlDocument GetCompilerSettingsDocument(string? location) {
+    public static XmlDocument GetCompilerSettingsDocument(string location) {
         XmlDocument document = new XmlDocument();
-        IEnumerable<FileInfo> files = new DirectoryInfo(location ?? Directory.GetCurrentDirectory()).EnumerateFiles();
 
         try { 
-            FileInfo compilerDefinition = new DirectoryInfo(location ?? Directory.GetCurrentDirectory()).EnumerateFiles().Where((info) => info.Name == "mcsharp.xml").Single();
+            FileInfo compilerDefinition = new FileInfo(location);
             document.Load(compilerDefinition.Open(System.IO.FileMode.Open));
 
-            #pragma warning disable CS8600, CS8604
-            XmlSchema schema = XmlSchema.Read(assembly.GetManifestResourceStream("MCSharp.data.CompilerSettingsSchema.xsd"), null);
+            XmlSchema schema = XmlSchema.Read(assembly.GetManifestResourceStream("MCSharp.data.CompilerSettingsSchema.xsd")!, null)!;
             XmlSchemaSet schemaSet = new XmlSchemaSet();
             schemaSet.Add(schema);
-            #pragma warning restore
 
             document.Schemas = schemaSet;
             document.Validate((sender, e) => {
@@ -76,7 +73,7 @@ class Program {
     }
 
     private static int CompileProject(CompileOptions options) {
-        XmlDocument document = GetCompilerSettingsDocument(options.InputFile);
+        XmlDocument document = GetCompilerSettingsDocument(options.InputFile ?? Path.Combine(Directory.GetCurrentDirectory(), "mcsharp.xml"));
 
         return 0;
     }

@@ -19,7 +19,7 @@ class EnvParser {
 
     public static Dictionary<string, string> LoadEnvIntoDictionary(string? location) {
         Dictionary<string, string> env = new Dictionary<string, string>();
-        FileInfo envFile = new FileInfo($"{location ?? ""}.env");
+        FileInfo envFile = new FileInfo(Path.Combine(location ?? Directory.GetCurrentDirectory(), ".env"));
         StreamReader stream = envFile.OpenText();
         string content = stream.ReadToEnd();
         stream.Close();

@@ -1,16 +1,21 @@
 using System.Xml;
 using Octokit;
 using MCSharp.Options;
+using System.IO.Compression;
 
 namespace MCSharp;
 
 class DependencyManager {
     private static readonly object objLock = new object();
+    private static string path = Directory.GetCurrentDirectory();
 
     private DependencyManager() {}
 
     public static int Resolve(DependencyOptions options) {
-        XmlDocument document = Program.GetCompilerSettingsDocument(options.CompilerDirectory);
+        if(options.Path != null)
+            path = options.Path;
+
+        XmlNode document = Program.GetCompilerSettingsDocument(Path.Combine(path, "mcsharp.xml"))["compiler"]!;
 
         if(options.Fetch) {
             XmlNode? dependenciesNode = document["dependencies"];
@@ -54,9 +59,12 @@ class DependencyManager {
 
         byte[] content = await client.Repository.Content.GetArchive(author, repoName, ArchiveFormat.Zipball, version);
 
-        string zipFileName = $"{author}_{repoName}_{version}.zip";
+        string zipFileName = Path.Combine(path, "dependencies", "temp", $"{author}_{repoName}_{version}.zip)");
+        Directory.CreateDirectory(Path.Combine(path, "dependencies", "temp"));
         FileStream stream = new FileStream(zipFileName, System.IO.FileMode.OpenOrCreate, FileAccess.Write);
         await stream.WriteAsync(content, 0, content.Length);
         stream.Close();
+
+        ZipFile.ExtractToDirectory(zipFileName, Path.Combine(path, "dependencies"));
     }
 }

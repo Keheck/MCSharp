@@ -5,6 +5,9 @@ namespace MCSharp.Options;
 
 [Verb("dependencies", aliases: new string[]{"dependency"})]
 class DependencyOptions {
+   [Value(0)]
+   public string? Path { get; set; }
+
     /* If set, the dependency manager will add one or multiple dependency references of {owner}:{repo}:{version} to the mcsharp.xml file and download the required assets to the dependency cache.
        {owner} is the username of the repository owner, {repo} is the name of the repository and {version} is either the target commit shorthash or the release tag */
     [Option('a', "add")]
@@ -26,8 +29,4 @@ class DependencyOptions {
     /* If set, this one prints out ratelimit information to the user. Be aware that fetching ratelimit info in itself adds to the ratelimit counter. */
     [Option('i', "info")]
     public bool GetInformation { get; set; } = false;
-
-    /* If set, this points to the location of the mcsharp.xml file. If omitted, the current working directory will be assumed. */
-    [Option("sharp-dir")]
-    public string? CompilerDirectory { get; set; }
 }

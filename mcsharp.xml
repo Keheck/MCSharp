@@ -9,12 +9,17 @@
     <defines>
         <define name="hello" value="world"/>
     </defines>
+    <build>
+        <dir>
+            <code>sample/src/</code>
+            <lib>sample/lib/</lib>
+            <data>sample/data/</data>
+        </dir>
+    </build>
     <dependencies>
         <dependency>
-            <owner>Keheck</owner>
-            <repository>MCSharp-Stdlib</repository>
-            <commit>latest</commit>
-            <scope>compile</scope>
+            <author>Keheck</author>
+            <repository>MCSharp</repository>
         </dependency>
     </dependencies>
 </compiler>
