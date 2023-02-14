@@ -10,11 +10,17 @@
         <define name="hello" value="world"/>
     </defines>
     <build>
-        <dir>
-            <code>sample/src/</code>
-            <lib>sample/lib/</lib>
-            <data>sample/data/</data>
-        </dir>
+        <entry-points>
+            <function>init</function>
+        </entry-points>
+        <loops>
+            <function>main</function>
+        </loops>
+        <output>/out/</output>
+        <obfuscation-policy>
+            <functions>increment</functions>
+            <variables>letters</variables>
+        </obfuscation-policy>
     </build>
     <dependencies>
         <dependency>

@@ -74,6 +74,49 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="build">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="entry-points" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence maxOccurs="unbounded">
+                    <xs:element name="function" type="xs:string"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="loops" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence maxOccurs="unbounded">
+                    <xs:element name="function" type="xs:string"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="output" type="xs:string"/>
+              <xs:element name="obfuscation-policy" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="functions" minOccurs="0">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:enumeration value="increment"/>
+                          <xs:enumeration value="letters"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="variables" minOccurs="0">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:enumeration value="increment"/>
+                          <xs:enumeration value="letters"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
         <xs:element name="dependencies" minOccurs="0">
           <xs:annotation>
             <xs:documentation>Use this element to define several dependencies. The compiler will resolve those dependencies by searching GitHub's respositories.</xs:documentation>
@@ -144,28 +187,6 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <!--<xs:element name="build">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="entry-points" minOccurs="0">
-                <xs:complexType>
-                  <xs:sequence maxOccurs="unbounded">
-                    <xs:element name="function" type="xs:string"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="loops" minOccurs="0">
-                <xs:complexType>
-                  <xs:sequence maxOccurs="unbounded">
-                    <xs:element name="function" type="xs:string"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="output">
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
