@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="data/CompilerSettingsSchema.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <compiler>
-    <target>
-        <min>1.15</min>
-        <max>1.15</max>
-        <mismatch-policy>lowest</mismatch-policy>
-    </target>
     <defines>
         <define name="hello" value="world"/>
     </defines>
     <build>
+        <target>6</target>
         <entry-points>
             <function>init</function>
         </entry-points>
