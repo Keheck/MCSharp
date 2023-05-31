@@ -9,6 +9,7 @@ using Octokit;
 using System.Security.Cryptography;
 
 using MCSharp.Options;
+using MCSharp.Compiler;
 
 namespace MCSharp;
 
@@ -74,7 +75,7 @@ class Program {
 
     private static int CompileProject(CompileOptions options) {
         XmlDocument document = GetCompilerSettingsDocument(options.InputFile ?? Path.Combine(Directory.GetCurrentDirectory(), "mcsharp.xml"));
-
+        PreProcessor.init(document);
         return 0;
     }
 }

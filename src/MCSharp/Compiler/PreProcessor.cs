@@ -5,16 +5,20 @@ using System.Collections.Immutable;
 using System.Xml;
 
 class PreProcessor {
-    private static Dictionary<string, string> _globalMacros = new Dictionary<string, string>();
+    // Store object-like macros
+    private static Dictionary<string, string> _globalObjectMacros = new Dictionary<string, string>();
+    public static ImmutableDictionary<string, string> GlobalObjectMacros { get { return ImmutableDictionary.ToImmutableDictionary(_globalObjectMacros); }}
 
-    public static ImmutableDictionary<string, string> GlobalMacros { get { return ImmutableDictionary.ToImmutableDictionary(_globalMacros); }}
+    //Store function-like macros. First element of the value
+    private static Dictionary<string, string> _globalFunctionMacros = new Dictionary<string, string>();
+    public static ImmutableDictionary<string, string> GlobalFunctionMacros { get {return ImmutableDictionary.ToImmutableDictionary(_globalFunctionMacros); }}
 
     public static void init(XmlDocument document) {
         XmlElement? definitions = document["compiler"]!["defines"];
         if(definitions == null) return;
 
         foreach(XmlElement define in definitions.GetElementsByTagName("define")) {
-            Logger.log($"{define.Attributes["name"]!.Value}: {define.Attributes["value"]?.Value ?? "1"}", Logger.LogLevel.INFO);
+            string name = definitions.Attributes["name"]!.Value;
         }
     }
 }
