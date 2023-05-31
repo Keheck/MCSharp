@@ -3,19 +3,22 @@
   <xs:element name="compiler">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="defines" minOccurs="0">
+        <xs:element name="macros" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="define" minOccurs="1">
+              <xs:annotation>
+                <xs:documentation>Defines global macros that will always be present, irrespective of the defined macros in the source file. May be re-/undefined in source files.</xs:documentation>
+              </xs:annotation>
+              <xs:element name="macro" minOccurs="1" maxOccurs="unbounded">
                 <xs:complexType>
-                  <xs:attribute name="name" type="xs:string">
+                  <xs:attribute name="name" type="xs:string" use="required">
                     <xs:annotation>
-                      <xs:documentation>Defines the name of the token. Must be provided else a compilation error will be thrown</xs:documentation>
+                      <xs:documentation>Defines the name of the macro. May contain arguments. Must be provided else a compilation error will be thrown</xs:documentation>
                     </xs:annotation>
                   </xs:attribute>
-                  <xs:attribute name="value" type="xs:string">
+                  <xs:attribute name="value" type="xs:string" use="optional">
                     <xs:annotation>
-                      <xs:documentation>Defines the value of the token. if omitted, the default will be "1" without the quotes.</xs:documentation>
+                      <xs:documentation>Defines the value of the macro. If omitted, the default will be the numerical 1.</xs:documentation>
                     </xs:annotation>
                   </xs:attribute>
                 </xs:complexType>

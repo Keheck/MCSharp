@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="data/CompilerSettingsSchema.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <compiler>
-    <defines>
-        <define name="hello" value="world"/>
-    </defines>
+    <macros>
+        <macro name="hello" value="world"/>
+        <macro name="novalue"/>
+    </macros>
     <build>
         <target>6</target>
         <entry-points>
