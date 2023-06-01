@@ -7,7 +7,7 @@
           <xs:complexType>
             <xs:sequence>
               <xs:annotation>
-                <xs:documentation>Defines global macros that will always be present, irrespective of the defined macros in the source file. May be re-/undefined in source files.</xs:documentation>
+                <xs:documentation>Defines global macros that will always be present, irrespective of the defined macros in the source file. May be re-/undefined in source files. Currently not implemented but reserved for future use.</xs:documentation>
               </xs:annotation>
               <xs:element name="macro" minOccurs="1" maxOccurs="unbounded">
                 <xs:complexType>
