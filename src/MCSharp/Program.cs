@@ -75,7 +75,7 @@ class Program {
 
     private static int CompileProject(CompileOptions options) {
         XmlDocument document = GetCompilerSettingsDocument(options.InputFile ?? Path.Combine(Directory.GetCurrentDirectory(), "mcsharp.xml"));
-        PreProcessor.init(document);
+        PreProcessor.Init(document);
         return 0;
     }
 }
