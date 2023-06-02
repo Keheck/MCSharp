@@ -1,7 +1,7 @@
 namespace MCSharp;
 
 public class Logger {
-    public static int MaxLogLevel { get; set; } = 0;
+    public static int Verbosity { get; set; } = 0;
 
     private static StreamWriter? stream;
     private static string loggerName = "";
@@ -23,7 +23,7 @@ public class Logger {
     }
 
     public static void log(string message, LogLevel level) {
-        if((int)level <= MaxLogLevel) {
+        if((int)level <= Verbosity) {
             SetConsoleColor(level);
             Console.WriteLine(message);
             stream?.WriteLine(message);
