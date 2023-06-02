@@ -1,12 +1,8 @@
 ﻿using CommandLine;
 using System.Xml;
 using System.Xml.Schema;
-using MimeTypes;
 using System.Reflection;
-using System.Web;
-using System.Text;
 using Octokit;
-using System.Security.Cryptography;
 
 using MCSharp.Options;
 using MCSharp.Compiler;
@@ -16,22 +12,23 @@ namespace MCSharp;
 class Program {
     public static readonly Assembly assembly = typeof(Program).Assembly;
     public static readonly GitHubClient client = new GitHubClient(new ProductHeaderValue("MCSharp-Compiler", "1.0"));
+    public static string Cwd { get; private set; } = Directory.GetCurrentDirectory();
 
     private static readonly object objLock = new object();
 
-    static void Main(string[] args) {
-        EnvParser.LoadEnvIntoEnvironmentVariables();  
+    static int Main(string[] args) {
+        EnvParser.LoadEnvIntoEnvironmentVariables();
         
         if(Environment.GetEnvironmentVariable("GITHUB_TOKEN") == null) {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("Attention: You have not given an API key to the .env file (GITHUB_TOKEN={key}). Without an API key, Github restricts requests to "+
-            "60 requests per hour, whereas an API key allows for 5000 requests per hour. You can create an api token at https://github.com/settings/tokens?type=beta. "+
+            Console.WriteLine("Attention: You have not given an access token to the .env file (GITHUB_TOKEN={key}). Without a token, Github restricts requests to "+
+            "60 requests per hour, whereas an access token allows for 5000 requests per hour. You can create a token at https://github.com/settings/tokens?type=beta. "+
             "Do you wish to continue without an access token? [y/N]");
 
             string confirm = Console.ReadLine() ?? "N";
 
             if(confirm.ToUpper().First() != 'Y')
-                return;
+                return 0;
             
             Console.WriteLine("Continuing without token, rate limit is expected to be 60 requests/hour...");
             Console.ResetColor();
@@ -40,12 +37,14 @@ class Program {
             client.Credentials = new Credentials(Environment.GetEnvironmentVariable("GITHUB_TOKEN"));
         }
 
-        var result = Parser.Default.ParseArguments<CompileOptions, DependencyOptions>(args)
+        int result = Parser.Default.ParseArguments<CompileOptions, DependencyOptions>(args)
             .MapResult(
                 (CompileOptions options) => CompileProject(options),
                 (DependencyOptions options) => DependencyManager.Resolve(options),
-                (errors) => 1
+                (errors) => -1
             );
+        
+        return result;
     }
 
     public static XmlDocument GetCompilerSettingsDocument(string location) {
@@ -74,8 +73,22 @@ class Program {
     }
 
     private static int CompileProject(CompileOptions options) {
-        XmlDocument document = GetCompilerSettingsDocument(options.InputFile ?? Path.Combine(Directory.GetCurrentDirectory(), "mcsharp.xml"));
+        if(options.InputFile != null) Directory.SetCurrentDirectory(options.InputFile);
+
+        XmlDocument document = GetCompilerSettingsDocument(Path.Combine(Cwd, "mcsharp.xml"));
         PreProcessor.Init(document);
+
+        foreach(string sourceFilePath in Directory.EnumerateFiles(Cwd, "*.func", SearchOption.AllDirectories)) {
+            try {
+                string sourceContent = File.ReadAllText(sourceFilePath);
+                sourceContent = sourceContent.Replace("\r\n", "\n");
+                Logger.log(PreProcessor.Process(sourceContent, true), Logger.LogLevel.INFO);
+            } catch(CompilerException e) {
+                Logger.log(e.Message, Logger.LogLevel.ERROR);
+                return -1;
+            }
+        }
+
         return 0;
     }
 }
