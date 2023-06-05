@@ -18,7 +18,7 @@ Primitive data types are the built-in data types that already exist within the d
 
 `byte, boolean, double, float, int, long, short, string, vector3, vector3i`
 
-`byte, short, int` and `long` are all signed intergers with a size of 8, 16, 32 and 64 bits respectively. `boolean` are true/false values. Their theoretical size is 1 bit, although the real size may be larger, at least 8 bits. `float` and `double` are 32 bit and 64 bit signed floating point numbers, meaning the digits before and after the decimal point is not fixed. `string` is a sequence of characters. `vector3` and `vector3i` are 3 dimensional floating point and integer vectors. Their components have the same restraints as the respective scalar types.
+`byte, short, int` and `long` are all signed intergers with a size of 8, 16, 32 and 64 bits respectively. `boolean` are true/false values. Their theoretical size is 1 bit, although the real size may be larger, at least 8 bits. `float` and `double` are 32 bit and 64 bit signed floating point numbers, meaning the digits before and after the decimal point is not fixed. `string` is a sequence of characters. `vector3` and `vector3i` are 3 dimensional floating point and integer vectors. Their components are of type `float` and `int` and have the same restraints as the respective scalar types.
 
 ## Comments
 Comments allow you to, well, comment your code and explain aspects of your program that may not be obvious. They have no special syntax apart from characters that begin the comment. Comments are ignored completely by the compiler, with the preprocessor discarding them immediately. However, a command line option allows you to keep comments in the compiled files.
