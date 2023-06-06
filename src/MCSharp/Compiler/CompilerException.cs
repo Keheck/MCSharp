@@ -14,9 +14,9 @@ public class CompilerException: Exception {
         SourceFile = sourceFile;
     }
 
-    public CompilerException(string reason, string sourceFile, string sourceCode, int atCharacter) {
+    public CompilerException(string reason, string sourceFile, string sourceCode, int errorCharIndex) {
         Reason = reason;
-        string fromStartToError = sourceCode.Substring(0, atCharacter);
+        string fromStartToError = sourceCode.Substring(0, errorCharIndex);
 
         Line = fromStartToError.Count(c => c == '\n');
         Column = fromStartToError.Length - fromStartToError.LastIndexOf('\n');
