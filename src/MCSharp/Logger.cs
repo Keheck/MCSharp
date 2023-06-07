@@ -42,6 +42,9 @@ public class Logger {
             case LogLevel.ERROR:
                 Console.ForegroundColor = ConsoleColor.Red;
                 break;
+            case LogLevel.HINT:
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                break;
             case LogLevel.INFO:
             default:
                 Console.ResetColor();
@@ -50,7 +53,8 @@ public class Logger {
     }
 
     public enum LogLevel {
-        DEBUG = 1,
+        DEBUG = int.MaxValue,
+        HINT = 1,
         INFO = -10,
         WARN = -100,
         ERROR = int.MinValue
