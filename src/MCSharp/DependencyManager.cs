@@ -1,9 +1,9 @@
 using System.Xml;
 using Octokit;
-using MCSharp.Options;
+using MCSharp.Core.Options;
 using System.IO.Compression;
 
-namespace MCSharp;
+namespace MCSharp.Core;
 
 class DependencyManager {
     private static readonly object objLock = new object();

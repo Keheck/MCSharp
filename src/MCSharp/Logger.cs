@@ -1,4 +1,4 @@
-namespace MCSharp;
+namespace MCSharp.Core;
 
 public class Logger {
     public static int Verbosity { get; set; } = 0;

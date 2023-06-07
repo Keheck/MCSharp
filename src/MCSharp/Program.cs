@@ -4,10 +4,10 @@ using System.Xml.Schema;
 using System.Reflection;
 using Octokit;
 
-using MCSharp.Options;
+using MCSharp.Core.Options;
 using MCSharp.Compiler;
 
-namespace MCSharp;
+namespace MCSharp.Core;
 
 class Program {
     public static readonly Assembly assembly = typeof(Program).Assembly;

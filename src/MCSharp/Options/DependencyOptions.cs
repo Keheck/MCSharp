@@ -1,7 +1,7 @@
 using CommandLine;
 using System.Collections.Generic;
 
-namespace MCSharp.Options;
+namespace MCSharp.Core.Options;
 
 [Verb("dependencies", aliases: new string[]{"dependency"})]
 class DependencyOptions {

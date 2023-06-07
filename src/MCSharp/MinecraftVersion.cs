@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace MCSharp;
+namespace MCSharp.Core;
 
 /* This is a utility class for easy comparison of Minecraft version numbers and other things*/
 class MinecraftVersion {

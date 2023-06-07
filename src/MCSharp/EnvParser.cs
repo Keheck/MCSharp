@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace MCSharp;
+namespace MCSharp.Core;
 
 class EnvParser {
     public static void LoadEnvIntoEnvironmentVariables() {

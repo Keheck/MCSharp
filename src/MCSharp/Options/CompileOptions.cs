@@ -1,6 +1,6 @@
 using CommandLine;
 
-namespace MCSharp.Options;
+namespace MCSharp.Core.Options;
 
 [Verb("build", true)]
 class CompileOptions {
