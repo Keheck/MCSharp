@@ -20,18 +20,18 @@ class Program {
         EnvParser.LoadEnvIntoEnvironmentVariables();
         
         if(Environment.GetEnvironmentVariable("GITHUB_TOKEN") == null) {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("Attention: You have not given an access token to the .env file (GITHUB_TOKEN={key}). Without a token, Github restricts requests to "+
+            Logger.OverrideVerbosity = true;
+            Logger.log("Attention: You have not given an access token to the .env file (GITHUB_TOKEN={key}). Without a token, Github restricts requests to "+
             "60 requests per hour, whereas an access token allows for 5000 requests per hour. You can create a token at https://github.com/settings/tokens?type=beta. "+
-            "Do you wish to continue without an access token? [y/N]");
+            "Do you wish to continue without an access token? [y/N]", Logger.LogLevel.WARN);
 
             string confirm = Console.ReadLine() ?? "N";
 
             if(confirm.ToUpper().First() != 'Y')
                 return 0;
             
-            Console.WriteLine("Continuing without token, rate limit is expected to be 60 requests/hour...");
-            Console.ResetColor();
+            Logger.log("Continuing without token, rate limit is expected to be 60 requests/hour...", Logger.LogLevel.WARN);
+            Logger.OverrideVerbosity = false;
         }
         else {
             client.Credentials = new Credentials(Environment.GetEnvironmentVariable("GITHUB_TOKEN"));

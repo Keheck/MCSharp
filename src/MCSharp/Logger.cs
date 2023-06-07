@@ -2,6 +2,7 @@ namespace MCSharp.Core;
 
 public class Logger {
     public static int Verbosity { get; set; } = 0;
+    public static bool OverrideVerbosity { get; set; } = false;
 
     private static StreamWriter? stream;
     private static string loggerName = "";
