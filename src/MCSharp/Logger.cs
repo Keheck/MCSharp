@@ -24,7 +24,7 @@ public class Logger {
     }
 
     public static void Log(string message, LogLevel level) {
-        if((int)level <= Verbosity) {
+        if((int)level <= Verbosity || OverrideVerbosity) {
             SetConsoleColor(level);
             Console.WriteLine(message);
             stream?.WriteLine(message);

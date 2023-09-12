@@ -37,4 +37,8 @@ The logging system aims to only print relevant messages to the user. Each messag
 | Warn | -100 |
 | Error | -2147483648<br/>(minimum 32-bit integer) |
 
-Note that this means no matter how low you set the chosen verbosity level, errors will always be printed as they will always be either equal or less than the chosen level. This is by design, as errors are messages that prevent a program from compiling correctly and give insight into where and what exactly prevents the compiler from acomplishing its task. Also note that Debug messages are only available with the highest possible verbosity level. This is also by design, as debug messages are only intended for the developer and hold no real value in an end user scenario.
+Note 1: This means no matter how low you set the chosen verbosity level, errors will always be printed as they will always be either equal or less than the chosen level. This is by design, as errors are messages that prevent a program from compiling correctly and give insight into where and what exactly prevents the compiler from acomplishing its task.
+
+Note 2: That Debug messages are only available with the highest possible verbosity level. This is also by design, as debug messages are only intended for the developer and hold no real value in an end user scenario.
+
+Note 3: Some Log messages overrule the passed settings so that they can always display regardless of selected verbosity and still have their appropriate log level. Otherwise, messages that would have to be displayed would have to use `Error` as their log level, even if they weren't errors at all.
