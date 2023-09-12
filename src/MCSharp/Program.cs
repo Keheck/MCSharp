@@ -21,7 +21,7 @@ class Program {
         
         if(Environment.GetEnvironmentVariable("GITHUB_TOKEN") == null) {
             Logger.OverrideVerbosity = true;
-            Logger.log("Attention: You have not given an access token to the .env file (GITHUB_TOKEN={key}). Without a token, Github restricts requests to "+
+            Logger.Log("Attention: You have not given an access token to the .env file (GITHUB_TOKEN={key}). Without a token, Github restricts requests to "+
             "60 requests per hour, whereas an access token allows for 5000 requests per hour. You can create a token at https://github.com/settings/tokens?type=beta. "+
             "Do you wish to continue without an access token? [y/N]", Logger.LogLevel.WARN);
 
@@ -30,7 +30,7 @@ class Program {
             if(confirm.ToUpper().First() != 'Y')
                 return 0;
             
-            Logger.log("Continuing without token, rate limit is expected to be 60 requests/hour...", Logger.LogLevel.WARN);
+            Logger.Log("Continuing without token, rate limit is expected to be 60 requests/hour...", Logger.LogLevel.WARN);
             Logger.OverrideVerbosity = false;
         }
         else {
@@ -82,9 +82,9 @@ class Program {
             try {
                 string sourceContent = File.ReadAllText(sourceFilePath);
                 sourceContent = sourceContent.Replace("\r\n", "\n");
-                Logger.log(PreProcessor.Process(sourceContent, true), Logger.LogLevel.INFO);
+                Logger.Log(PreProcessor.Process(sourceContent, true), Logger.LogLevel.INFO);
             } catch(CompilerException e) {
-                Logger.log(e.Message, Logger.LogLevel.ERROR);
+                Logger.Log(e.Message, Logger.LogLevel.ERROR);
                 return -1;
             }
         }

@@ -24,5 +24,17 @@ Primitive data types are the built-in data types that already exist within the d
 Comments allow you to, well, comment your code and explain aspects of your program that may not be obvious. They have no special syntax apart from characters that begin the comment. Comments are ignored completely by the compiler, with the preprocessor discarding them immediately. However, a command line option allows you to keep comments in the compiled files.
 
 `//` starts a single-line comment. Ignored in strings, terminated by a newline.
-`/*` and `*/` start and terminate a block comment, with the actual comment nbetween them. Ignored in strings, new lines do not terminate the comment.
+`/*` and `*/` start and terminate a block comment, with the actual comment inbetween them. Ignored in strings, new lines do not terminate the comment.
 
+# The Logging system
+
+The logging system aims to only print relevant messages to the user. Each message has a certain Log Level which itself is associated with a signed 32-bit integer called its "verbosity rating". Larger values are more verbose and smaller values are less verbose. The actual verbosity ratings are chosen arbitrarily, with 0 being considered default. Running the compiler with the command line argument `-L <value>` will set the verbosity level of the compilation process to whatever value was passed. Any log messages with a verbosity rating equal or less than the set verbosity level will be printed. Current verbosity levels and ratings are:
+| Verbosity | Rating |
+| :-: | :-: |
+| Debug | 2147483647<br/>(maximum 32-bit integer) |
+| Hint | 1 |
+| Info | -10 |
+| Warn | -100 |
+| Error | -2147483648<br/>(minimum 32-bit integer) |
+
+Note that this means no matter how low you set the chosen verbosity level, errors will always be printed as they will always be either equal or less than the chosen level. This is by design, as errors are messages that prevent a program from compiling correctly and give insight into where and what exactly prevents the compiler from acomplishing its task. Also note that Debug messages are only available with the highest possible verbosity level. This is also by design, as debug messages are only intended for the developer and hold no real value in an end user scenario.

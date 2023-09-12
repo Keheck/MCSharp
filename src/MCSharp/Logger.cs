@@ -23,7 +23,7 @@ public class Logger {
         return true;
     }
 
-    public static void log(string message, LogLevel level) {
+    public static void Log(string message, LogLevel level) {
         if((int)level <= Verbosity) {
             SetConsoleColor(level);
             Console.WriteLine(message);
