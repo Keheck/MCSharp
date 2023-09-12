@@ -3,6 +3,7 @@ namespace MCSharp.Compiler;
 using System.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Runtime.CompilerServices;
 
 class PreProcessor {
     private const uint STRING =                0b_0000_0001;
@@ -10,7 +11,7 @@ class PreProcessor {
     private const uint BLOCK_COMMENT =         0b_0000_0100;
     private const uint ENCOUNTERED_BACKSLASH = 0b_0000_1000;
 
-    private const uint ANY_COMMENT = LINE_COMMENT | BLOCK_COMMENT;
+    private static uint codeContext = 0;
 
     public static void Init(XmlDocument document) {
         
@@ -29,16 +30,44 @@ class PreProcessor {
         return builder.ToString();
     }
 
+    private static bool IsCurrentContextAllOf(params uint[] partialContexts) {
+        uint totalContext = partialContexts.Aggregate((aggregate, element) => aggregate | element);
+        return (codeContext & totalContext) == totalContext;
+    }
+
+    private static bool IsCurrentContextAnyOf(params uint[] partialContexts) {
+        uint totalContext = partialContexts.Aggregate((aggregate, element) => aggregate | element);
+        return (codeContext & totalContext) != 0;
+    }
+
+    private static bool IsCurrentContextOnlyOf(params uint[] partialContexts) {
+        uint invertedTotalContext = ~partialContexts.Aggregate((aggregate, element) => aggregate | element);
+        return IsCurrentContextAllOf(partialContexts) && !IsCurrentContextAnyOf(invertedTotalContext);
+    }
+
+    private static void ToggleCurrentContext(uint contextMask) {
+        codeContext ^= contextMask;
+    }
+
+    private static void SetCurrentContext(uint contextMask) {
+        codeContext |= contextMask;
+    }
+
+    private static void UnsetCurrentContext(uint contextMask) {
+        codeContext &= ~contextMask;
+    }
+
     private static void TrimComments(ref string input) {
         StringBuilder builder = new StringBuilder();
 
         int startInclusive = 0;
         int endExclusive = 0;
-        uint codeContext = 0;
+        codeContext = 0;
 
         for(int i = 0; i < input.Length; i++) {
-            if((codeContext & (STRING | ENCOUNTERED_BACKSLASH)) == (STRING | ENCOUNTERED_BACKSLASH)) {
-                codeContext ^= ENCOUNTERED_BACKSLASH;
+            //if((codeContext & (STRING | ENCOUNTERED_BACKSLASH)) == (STRING | ENCOUNTERED_BACKSLASH)) {
+            if(IsCurrentContextAllOf(STRING, ENCOUNTERED_BACKSLASH)) {
+                ToggleCurrentContext(ENCOUNTERED_BACKSLASH);
                 continue;
             }
 
@@ -46,32 +75,35 @@ class PreProcessor {
 
             switch(c) {
                 case '\n':
-                    if((codeContext & STRING) != 0)
+                    if(IsCurrentContextAllOf(STRING))
                         throw new CompilerException("Unexpected line break inside string", "", input, i);
-                    if((codeContext & LINE_COMMENT) != 0) { 
+                    if(IsCurrentContextAllOf(LINE_COMMENT)) { 
                         startInclusive = i+1;
-                        codeContext ^= LINE_COMMENT;
+                        ToggleCurrentContext(LINE_COMMENT);
                     }
                     break;
                 case '"':
-                    if((codeContext & ANY_COMMENT) == 0)
-                        codeContext ^= STRING;
+                    if(IsCurrentContextAnyOf(LINE_COMMENT, BLOCK_COMMENT))
+                        ToggleCurrentContext(STRING);
                     break;
                 case '\\':
-                    if((codeContext & STRING) != 0)
-                        codeContext |= ENCOUNTERED_BACKSLASH;
+                    if(IsCurrentContextAllOf(STRING))
+                        SetCurrentContext(ENCOUNTERED_BACKSLASH);
                     break;
                 case '/':
-                    if((codeContext & (STRING | ANY_COMMENT)) == 0 && input[i+1] == '/') {
-                        codeContext |= LINE_COMMENT;
+                    //if((codeContext & (STRING | ANY_COMMENT)) == 0 && input[i+1] == '/') {
+                    if(!IsCurrentContextAnyOf(STRING, LINE_COMMENT, BLOCK_COMMENT) && input[i+1] == '/') {
+                        SetCurrentContext(LINE_COMMENT);
                         endExclusive = i;
                     }
-                    else if((codeContext & (STRING | ANY_COMMENT)) == 0 && input[i+1] == '*') {
-                        codeContext |= BLOCK_COMMENT;
+                    //else if((codeContext & (STRING | ANY_COMMENT)) == 0 && input[i+1] == '*') {
+                    else if(IsCurrentContextAnyOf(STRING, LINE_COMMENT, BLOCK_COMMENT) && input[i+1] == '*') {
+                        SetCurrentContext(BLOCK_COMMENT);
                         endExclusive = i;
                     }
-                    else if((codeContext & (STRING | BLOCK_COMMENT)) == BLOCK_COMMENT && input[i-1] == '*') {
-                        codeContext ^= BLOCK_COMMENT;
+                    //else if((codeContext & (STRING | BLOCK_COMMENT)) == BLOCK_COMMENT && input[i-1] == '*') {
+                    else if(IsCurrentContextAnyOf(STRING, LINE_COMMENT, BLOCK_COMMENT) && input[i-1] == '*') {
+                        ToggleCurrentContext(BLOCK_COMMENT);
                         startInclusive = i+1;
                     }
                     break;
