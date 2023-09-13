@@ -24,7 +24,7 @@ class PreProcessor {
             TrimComments(ref input);
 
         // No need to process empty lines, nor do we need trailing/leading spaces in the source code -> Remove them
-        input = Regex.Replace(input, @"\n{2,}", "\n").Trim();
+        // input = Regex.Replace(input, @"\n{2,}", "\n").Trim();
 
         builder.Append(input);
         return builder.ToString();
@@ -65,7 +65,7 @@ class PreProcessor {
         codeContext = 0;
 
         for(int i = 0; i < input.Length; i++) {
-            //if((codeContext & (STRING | ENCOUNTERED_BACKSLASH)) == (STRING | ENCOUNTERED_BACKSLASH)) {
+            //We don't want to parse the current character in a string if it's escaped, as it will have its meaning as a normal character instead of a real token"
             if(IsCurrentContextAllOf(STRING, ENCOUNTERED_BACKSLASH)) {
                 ToggleCurrentContext(ENCOUNTERED_BACKSLASH);
                 continue;
@@ -83,11 +83,11 @@ class PreProcessor {
                     }
                     break;
                 case '"':
-                    if(IsCurrentContextAnyOf(LINE_COMMENT, BLOCK_COMMENT))
+                    if(!IsCurrentContextAnyOf(LINE_COMMENT, BLOCK_COMMENT))
                         ToggleCurrentContext(STRING);
                     break;
                 case '\\':
-                    if(IsCurrentContextAllOf(STRING))
+                    if(IsCurrentContextAnyOf(STRING))
                         SetCurrentContext(ENCOUNTERED_BACKSLASH);
                     break;
                 case '/':
@@ -97,7 +97,7 @@ class PreProcessor {
                         endExclusive = i;
                     }
                     //else if((codeContext & (STRING | ANY_COMMENT)) == 0 && input[i+1] == '*') {
-                    else if(IsCurrentContextAnyOf(STRING, LINE_COMMENT, BLOCK_COMMENT) && input[i+1] == '*') {
+                    else if(!IsCurrentContextAnyOf(STRING, LINE_COMMENT, BLOCK_COMMENT) && input[i+1] == '*') {
                         SetCurrentContext(BLOCK_COMMENT);
                         endExclusive = i;
                     }
@@ -120,9 +120,9 @@ class PreProcessor {
         if(codeContext != 0) {
             string message = "";
         
-            if((codeContext & STRING) != 0)
+            if(IsCurrentContextAnyOf(STRING))
                 message = "Unexpected EOF in string";
-            else if((codeContext & BLOCK_COMMENT) != 0)
+            else if(IsCurrentContextAnyOf(BLOCK_COMMENT))
                 message = "Unexpected EOF in block comment";
             
             throw new CompilerException(message, "", input.Count(c => c == '\n'), input.Length - input.LastIndexOf('\n'));
